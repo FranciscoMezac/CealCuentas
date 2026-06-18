@@ -11,6 +11,7 @@
   --danger: #b42318;
   --danger-soft: #fff1f0;
   --success-soft: #ecfdf5;
+  --surface-soft: #f8fafc;
   --shadow: 0 20px 60px rgba(23, 32, 51, 0.14);
 }
 
@@ -30,14 +31,114 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
+button {
+  min-height: 46px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 18px;
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #c9d4e2;
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: var(--text);
+  background: #ffffff;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
+  outline: 3px solid rgba(15, 118, 110, 0.16);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 30px 20px;
+  border-right: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(10px);
+}
+
+.brand {
+  padding: 4px 8px 24px;
+}
+
+.brand strong {
+  display: block;
+  color: var(--text);
+  font-size: 1.25rem;
+}
+
+.nav-list {
+  display: grid;
+  gap: 8px;
+}
+
+.nav-button {
+  width: 100%;
+  justify-content: flex-start;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+}
+
+.nav-button:hover,
+.nav-button.active {
+  border-color: #b7d7d4;
+  background: var(--success-soft);
+  color: var(--primary-dark);
+}
+
 .app-shell {
-  width: min(1120px, calc(100% - 32px));
+  width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 48px 0;
+  padding: 32px 0;
+}
+
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
 }
 
 .panel {
@@ -80,36 +181,6 @@ h2 {
   font-size: 1.1rem;
 }
 
-.summary {
-  min-width: 220px;
-  padding: 16px 18px;
-  border: 1px solid #b7d7d4;
-  border-radius: 8px;
-  background: var(--success-soft);
-  text-align: right;
-}
-
-.summary span {
-  display: block;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.summary strong {
-  display: block;
-  margin-top: 4px;
-  color: var(--primary-dark);
-  font-size: 1.6rem;
-}
-
-.expense-form {
-  display: grid;
-  grid-template-columns: minmax(150px, 220px) minmax(240px, 1fr) auto;
-  gap: 16px;
-  align-items: end;
-  padding: 24px 28px 14px;
-}
-
 label {
   display: grid;
   gap: 8px;
@@ -118,39 +189,133 @@ label {
   font-weight: 700;
 }
 
-input {
-  width: 100%;
-  min-height: 46px;
-  border: 1px solid #c9d4e2;
-  border-radius: 6px;
-  padding: 10px 12px;
+.summary,
+.sale-total {
+  min-width: 220px;
+  padding: 16px 18px;
+  border: 1px solid #b7d7d4;
+  border-radius: 8px;
+  background: var(--success-soft);
+  text-align: right;
+}
+
+.summary span,
+.sale-total span,
+.stock-tile span,
+.metric-tile span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.summary strong,
+.sale-total strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--primary-dark);
+  font-size: 1.6rem;
+}
+
+.stock-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.stock-strip.compact {
+  border-top: 1px solid var(--line);
+}
+
+.stock-tile,
+.metric-tile {
+  min-height: 88px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  background: #fbfcfe;
+}
+
+.stock-tile strong,
+.metric-tile strong {
+  display: block;
+  margin-top: 8px;
   color: var(--text);
+  font-size: 1.5rem;
+}
+
+.section-band {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-title {
+  margin-bottom: 14px;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.quick-button,
+.secondary-button,
+.ghost-button {
+  border: 1px solid #c9d4e2;
   background: #ffffff;
+  color: var(--text);
 }
 
-input:focus {
-  border-color: var(--primary);
-  outline: 3px solid rgba(15, 118, 110, 0.16);
+.quick-button:hover,
+.secondary-button:hover,
+.ghost-button:hover {
+  border-color: #b7d7d4;
+  background: var(--surface-soft);
+  color: var(--primary-dark);
 }
 
-button {
-  min-height: 46px;
-  border: 0;
-  border-radius: 6px;
-  padding: 0 18px;
-  background: var(--primary);
-  color: #ffffff;
-  font-weight: 700;
-  cursor: pointer;
+.action-row {
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--line);
 }
 
-button:hover {
-  background: var(--primary-dark);
+.manual-form,
+.expense-form,
+.stock-form,
+.sale-footer {
+  display: grid;
+  gap: 16px;
+  align-items: end;
 }
 
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
+.manual-form {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-soft);
+}
+
+.expense-form {
+  grid-template-columns: minmax(150px, 220px) minmax(240px, 1fr) auto;
+  padding: 24px 28px 14px;
+}
+
+.stock-form {
+  grid-template-columns: repeat(3, minmax(160px, 1fr)) auto;
+  padding: 24px 28px 14px;
+}
+
+.sale-footer {
+  grid-template-columns: minmax(170px, 220px) minmax(240px, 1fr) minmax(180px, auto) auto;
+  padding: 22px 28px;
+  border-top: 1px solid var(--line);
+  background: #fbfcfe;
+}
+
+.wide-field {
+  min-width: 0;
 }
 
 .message {
@@ -172,7 +337,7 @@ button:disabled {
   padding: 18px 28px;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: #f8fafc;
+  background: var(--surface-soft);
 }
 
 .table-header span {
@@ -186,8 +351,12 @@ button:disabled {
 
 table {
   width: 100%;
-  border-collapse: collapse;
   min-width: 720px;
+  border-collapse: collapse;
+}
+
+.cart-table {
+  min-width: 940px;
 }
 
 th,
@@ -208,6 +377,37 @@ th {
 td.amount {
   color: var(--accent);
   font-weight: 700;
+  white-space: nowrap;
+}
+
+.stock-note {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+.inline-input {
+  min-height: 38px;
+  margin-top: 10px;
+}
+
+.price-input {
+  max-width: 130px;
+}
+
+.quantity-control {
+  display: grid;
+  grid-template-columns: 36px 72px 36px;
+  gap: 6px;
+  align-items: center;
+}
+
+.mini-button {
+  width: 36px;
+  min-height: 36px;
+  padding: 0;
 }
 
 .delete-button {
@@ -221,16 +421,84 @@ td.amount {
   background: #ffe3e0;
 }
 
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  gap: 12px;
+  padding: 24px 28px;
+}
+
+.metric-tile strong {
+  color: var(--primary-dark);
+}
+
+.accent-tile strong {
+  color: var(--accent);
+}
+
 .empty {
   padding: 32px 18px;
   color: var(--muted);
   text-align: center;
 }
 
-@media (max-width: 760px) {
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: sticky;
+    z-index: 10;
+    height: auto;
+    padding: 16px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand {
+    padding: 0 4px 14px;
+  }
+
+  .nav-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .nav-button {
+    justify-content: center;
+    padding: 0 10px;
+    text-align: center;
+  }
+
   .app-shell {
-    width: min(100% - 20px, 1120px);
+    width: min(100% - 24px, 1180px);
     padding: 20px 0;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .expense-form,
+  .stock-form,
+  .sale-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .summary,
+  .sale-total {
+    min-width: 0;
+    text-align: left;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    width: min(100% - 20px, 1180px);
   }
 
   .panel-header {
@@ -239,19 +507,33 @@ td.amount {
     padding: 22px;
   }
 
-  .summary {
-    min-width: 0;
-    text-align: left;
+  .stock-strip,
+  .metric-grid {
+    grid-template-columns: 1fr;
+    padding: 20px 22px;
   }
 
-  .expense-form {
-    grid-template-columns: 1fr;
-    padding: 22px 22px 12px;
+  .section-band,
+  .action-row,
+  .manual-form,
+  .expense-form,
+  .stock-form,
+  .sale-footer {
+    padding-left: 22px;
+    padding-right: 22px;
   }
 
   .message,
   .table-header {
     padding-left: 22px;
     padding-right: 22px;
+  }
+
+  .nav-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quick-grid {
+    grid-template-columns: 1fr;
   }
 }

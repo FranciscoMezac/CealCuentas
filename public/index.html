@@ -3,77 +3,337 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registro de Gastos CEAL</title>
+    <title>CEAL Cuentas</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <section class="panel" aria-labelledby="page-title">
-        <header class="panel-header">
-          <div>
-            <p class="eyebrow">CEAL</p>
-            <h1 id="page-title">Registro de gastos</h1>
-          </div>
-          <div class="summary" aria-live="polite">
-            <span>Total ocupado</span>
-            <strong id="totalAmount">$0</strong>
-          </div>
-        </header>
-
-        <form id="expenseForm" class="expense-form" autocomplete="off">
-          <label>
-            Monto
-            <input
-              id="amountInput"
-              name="monto"
-              type="text"
-              inputmode="numeric"
-              placeholder="Ej: 14000"
-              required
-            />
-          </label>
-
-          <label class="description-field">
-            Descripcion
-            <input
-              id="descriptionInput"
-              name="descripcion"
-              type="text"
-              placeholder="Ej: carne para asado"
-              maxlength="160"
-              required
-            />
-          </label>
-
-          <button type="submit">Registrar gasto</button>
-        </form>
-
-        <p id="message" class="message" role="status" aria-live="polite"></p>
-
-        <div class="table-header">
-          <h2>Movimientos</h2>
-          <span id="countText">0 registros</span>
+    <div class="layout">
+      <aside class="sidebar" aria-label="Navegación principal">
+        <div class="brand">
+          <p class="eyebrow">CEAL</p>
+          <strong>Cuentas</strong>
         </div>
 
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Fecha</th>
-                <th scope="col">Descripcion</th>
-                <th scope="col">Monto</th>
-                <th scope="col">Accion</th>
-              </tr>
-            </thead>
-            <tbody id="expenseRows">
-              <tr>
-                <td colspan="4" class="empty">Cargando registros...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
+        <nav class="nav-list">
+          <button class="nav-button active" type="button" data-view="ventas" aria-controls="view-ventas">
+            Ventas
+          </button>
+          <button class="nav-button" type="button" data-view="gastos" aria-controls="view-gastos">
+            Gastos
+          </button>
+          <button class="nav-button" type="button" data-view="stock" aria-controls="view-stock">
+            Stock
+          </button>
+          <button class="nav-button" type="button" data-view="resumen" aria-controls="view-resumen">
+            Resumen
+          </button>
+        </nav>
+      </aside>
+
+      <main class="app-shell">
+        <section id="view-ventas" class="view active" aria-labelledby="ventas-title">
+          <div class="panel">
+            <header class="panel-header">
+              <div>
+                <p class="eyebrow">Caja</p>
+                <h1 id="ventas-title">Ventas</h1>
+              </div>
+              <div class="summary" aria-live="polite">
+                <span>Total carrito</span>
+                <strong id="cartTotal">$0</strong>
+              </div>
+            </header>
+
+            <div class="stock-strip" aria-label="Stock actual">
+              <div class="stock-tile">
+                <span>Choripanes</span>
+                <strong id="stockChoripanes">0</strong>
+              </div>
+              <div class="stock-tile">
+                <span>Bebidas</span>
+                <strong id="stockBebidas">0</strong>
+              </div>
+              <div class="stock-tile">
+                <span>Vasos</span>
+                <strong id="stockVasos">0</strong>
+              </div>
+            </div>
+
+            <p id="salesMessage" class="message" role="status" aria-live="polite"></p>
+
+            <div class="table-header">
+              <h2>Carrito</h2>
+              <button id="clearCartButton" type="button" class="ghost-button">Vaciar carrito</button>
+            </div>
+
+            <div class="table-wrap">
+              <table class="cart-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio unitario</th>
+                    <th scope="col">Subtotal</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="cartRows">
+                  <tr>
+                    <td colspan="5" class="empty">Carrito vacío.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <form id="saleForm" class="sale-footer">
+              <label>
+                Método de pago
+                <select id="paymentMethod">
+                  <option>Efectivo</option>
+                  <option>Transferencia</option>
+                  <option>Tarjeta</option>
+                  <option>Otro</option>
+                </select>
+              </label>
+
+              <label class="wide-field">
+                Observación de la venta
+                <textarea id="saleObservation" rows="2" maxlength="500"></textarea>
+              </label>
+
+              <div class="sale-total">
+                <span>Total venta</span>
+                <strong id="saleTotal">$0</strong>
+              </div>
+
+              <button type="submit">Registrar venta</button>
+            </form>
+
+            <div class="section-band">
+              <div class="section-title">
+                <h2>Productos rápidos</h2>
+              </div>
+              <div class="quick-grid" id="quickProducts">
+                <button type="button" class="quick-button" data-product="Choripán">Choripán</button>
+                <button type="button" class="quick-button" data-product="Bebida">Bebida</button>
+                <button type="button" class="quick-button" data-product="Té">Té</button>
+                <button type="button" class="quick-button" data-product="Café">Café</button>
+                <button type="button" class="quick-button" data-product="Promo choripán + Bebida">
+                  Promo choripán + Bebida
+                </button>
+                <button type="button" class="quick-button" data-product="Promo choripán + Té">
+                  Promo choripán + Té
+                </button>
+                <button type="button" class="quick-button" data-product="Promo choripán + Café">
+                  Promo choripán + Café
+                </button>
+              </div>
+            </div>
+
+            <div class="action-row">
+              <button id="toggleManualProduct" type="button" class="secondary-button">Agregar producto manual</button>
+            </div>
+
+            <form id="manualProductForm" class="manual-form hidden" autocomplete="off">
+              <label>
+                Producto
+                <input id="manualProductName" type="text" maxlength="120" placeholder="Ej: extra pebre" />
+              </label>
+              <label>
+                Cantidad
+                <input id="manualQuantity" type="number" min="1" step="1" value="1" />
+              </label>
+              <label>
+                Precio unitario
+                <input id="manualPrice" type="text" inputmode="numeric" placeholder="Ej: 1000" />
+              </label>
+              <button type="submit">Agregar al carrito</button>
+            </form>
+
+            <div class="table-header">
+              <h2>Últimas ventas</h2>
+              <span id="salesCountText">0 ventas</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Venta</th>
+                    <th scope="col">Pago</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="salesRows">
+                  <tr>
+                    <td colspan="4" class="empty">Cargando ventas...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-gastos" class="view" aria-labelledby="gastos-title">
+          <div class="panel">
+            <header class="panel-header">
+              <div>
+                <p class="eyebrow">Egresos</p>
+                <h1 id="gastos-title">Gastos</h1>
+              </div>
+              <div class="summary" aria-live="polite">
+                <span>Total gastado</span>
+                <strong id="totalSpent">$0</strong>
+              </div>
+            </header>
+
+            <form id="expenseForm" class="expense-form" autocomplete="off">
+              <label>
+                Monto
+                <input id="amountInput" name="monto" type="text" inputmode="numeric" placeholder="Ej: 14000" required />
+              </label>
+
+              <label class="description-field">
+                Descripción
+                <input
+                  id="descriptionInput"
+                  name="descripcion"
+                  type="text"
+                  placeholder="Ej: carne para asado"
+                  maxlength="160"
+                  required
+                />
+              </label>
+
+              <button type="submit">Registrar gasto</button>
+            </form>
+
+            <p id="expenseMessage" class="message" role="status" aria-live="polite"></p>
+
+            <div class="table-header">
+              <h2>Movimientos</h2>
+              <span id="expenseCountText">0 registros</span>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="expenseRows">
+                  <tr>
+                    <td colspan="4" class="empty">Cargando registros...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-stock" class="view" aria-labelledby="stock-title">
+          <div class="panel">
+            <header class="panel-header">
+              <div>
+                <p class="eyebrow">Inventario</p>
+                <h1 id="stock-title">Stock</h1>
+              </div>
+            </header>
+
+            <form id="stockForm" class="stock-form" autocomplete="off">
+              <label>
+                Choripanes
+                <input id="stockInputChoripanes" type="number" min="0" step="1" />
+              </label>
+              <label>
+                Bebidas
+                <input id="stockInputBebidas" type="number" min="0" step="1" />
+              </label>
+              <label>
+                Vasos
+                <input id="stockInputVasos" type="number" min="0" step="1" />
+              </label>
+              <button type="submit">Guardar stock</button>
+            </form>
+
+            <p id="stockMessage" class="message" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section id="view-resumen" class="view" aria-labelledby="resumen-title">
+          <div class="panel">
+            <header class="panel-header">
+              <div>
+                <p class="eyebrow">Balance</p>
+                <h1 id="resumen-title">Resumen</h1>
+              </div>
+            </header>
+
+            <div class="metric-grid">
+              <div class="metric-tile">
+                <span>Total vendido</span>
+                <strong id="summarySold">$0</strong>
+              </div>
+              <div class="metric-tile">
+                <span>Total gastado</span>
+                <strong id="summarySpent">$0</strong>
+              </div>
+              <div class="metric-tile accent-tile">
+                <span>Ganancia actual</span>
+                <strong id="summaryProfit">$0</strong>
+              </div>
+              <div class="metric-tile">
+                <span>Ventas registradas</span>
+                <strong id="summarySalesCount">0</strong>
+              </div>
+              <div class="metric-tile">
+                <span>Gastos registrados</span>
+                <strong id="summaryExpenseCount">0</strong>
+              </div>
+            </div>
+
+            <div class="stock-strip compact" aria-label="Stock restante">
+              <div class="stock-tile">
+                <span>Choripanes restantes</span>
+                <strong id="summaryStockChoripanes">0</strong>
+              </div>
+              <div class="stock-tile">
+                <span>Bebidas restantes</span>
+                <strong id="summaryStockBebidas">0</strong>
+              </div>
+              <div class="stock-tile">
+                <span>Vasos restantes</span>
+                <strong id="summaryStockVasos">0</strong>
+              </div>
+            </div>
+
+            <div class="table-header">
+              <h2>Productos vendidos</h2>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="productSummaryRows">
+                  <tr>
+                    <td colspan="3" class="empty">Sin ventas registradas.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
 
     <script src="app.js" defer></script>
   </body>
