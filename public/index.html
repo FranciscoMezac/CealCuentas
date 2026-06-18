@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Gastos CEAL</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel" aria-labelledby="page-title">
+        <header class="panel-header">
+          <div>
+            <p class="eyebrow">CEAL</p>
+            <h1 id="page-title">Registro de gastos</h1>
+          </div>
+          <div class="summary" aria-live="polite">
+            <span>Total ocupado</span>
+            <strong id="totalAmount">$0</strong>
+          </div>
+        </header>
+
+        <form id="expenseForm" class="expense-form" autocomplete="off">
+          <label>
+            Monto
+            <input
+              id="amountInput"
+              name="monto"
+              type="text"
+              inputmode="numeric"
+              placeholder="Ej: 14000"
+              required
+            />
+          </label>
+
+          <label class="description-field">
+            Descripcion
+            <input
+              id="descriptionInput"
+              name="descripcion"
+              type="text"
+              placeholder="Ej: carne para asado"
+              maxlength="160"
+              required
+            />
+          </label>
+
+          <button type="submit">Registrar gasto</button>
+        </form>
+
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+
+        <div class="table-header">
+          <h2>Movimientos</h2>
+          <span id="countText">0 registros</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Accion</th>
+              </tr>
+            </thead>
+            <tbody id="expenseRows">
+              <tr>
+                <td colspan="4" class="empty">Cargando registros...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

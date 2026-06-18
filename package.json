@@ -1,0 +1,10 @@
+{
+  "name": "registro-cuentas-ceal",
+  "version": "1.0.0",
+  "description": "Registro sencillo de gastos con HTML, CSS, JS y SQLite.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --no-warnings server.js"
+  },
+  "license": "MIT"
+}
